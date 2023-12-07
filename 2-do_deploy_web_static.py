@@ -33,20 +33,18 @@ def do_deploy(archive_path):
     """distributes an archive to your web servers"""
     if not os.path.exists(archive_path):
         return False
-    try:
-        filename = os.path.basename(archive_path)
-        name = filename.split('.')[0]
-        put(archive_path, '/tmp/')
-        run(f"mkdir -p /data/web_static/releases/{name}/")
-        run(f"tar -xzvf /tmp/{filename} -C /data/web_static/releases/{name}/")
-        run(f"rm /tmp/{filename}")
-        run(f"mv /data/web_static/releases/{name}/web_static/* \
-            /data/web_static/releases/{name}/")
-        run(f"rm -rf /data/web_static/releases/{name}/web_static")
-        run("rm -rf /data/web_static/current")
-        run(f"ln -s /data/web_static/releases/{name}/ \
-            /data/web_static/current")
-        print("New version deployed!")
-    except Exception:
-        return False
+
+    filename = os.path.basename(archive_path)
+    name = filename.split('.')[0]
+    put(archive_path, '/tmp/')
+    run(f"mkdir -p /data/web_static/releases/{name}/")
+    run(f"tar -xzvf /tmp/{filename} -C /data/web_static/releases/{name}/")
+    run(f"rm /tmp/{filename}")
+    run(f"mv /data/web_static/releases/{name}/web_static/* \
+        /data/web_static/releases/{name}/")
+    run(f"rm -rf /data/web_static/releases/{name}/web_static")
+    run("rm -rf /data/web_static/current")
+    run(f"ln -s /data/web_static/releases/{name}/ \
+        /data/web_static/current")
+    print("New version deployed!")
     return True
