@@ -64,6 +64,15 @@ def deploy():
 
 @task
 def do_clean(number=0):
+    """Delete out-of-date archives.
+
+    Args:
+        number (int): The number of archives to keep.
+
+    If number is 0 or 1, keeps only the most recent archive. If
+    number is 2, keeps the most and second-most recent archives,
+    etc.
+    """
     if (number == 0 or number == 1):
         local("ls -1 versions/web_static_*.tgz \
               | sort -n | head -n -1 | xargs rm")
