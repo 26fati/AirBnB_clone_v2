@@ -37,11 +37,16 @@ def do_deploy(archive_path):
         filename = os.path.basename(archive_path)
         name = filename.split('.')[0]
         put(archive_path, '/tmp/')
+        run(f"mkdir -p /data/web_static/releases/{name}/")
         run(f"tar -xzvf /tmp/{filename} -C /data/web_static/releases/{name}/")
         run(f"rm /tmp/{filename}")
-        run("rm /data/web_static/current")
-        run(f"ln -sf /data/web_static/releases/{name}\
+        run(f"mv /data/web_static/releases/{name}/web_static/* \
+            /data/web_static/releases/{name}/")
+        run(f"rm -rf /data/web_static/releases/{name}/web_static")
+        run("rm -rf /data/web_static/current")
+        run(f"ln -s /data/web_static/releases/{name}/ \
             /data/web_static/current")
+        print("New version deployed!")
     except Exception:
         return False
     return True
