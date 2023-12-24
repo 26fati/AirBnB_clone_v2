@@ -10,6 +10,11 @@ from models.city import City
 from models.amenity import Amenity
 from models.review import Review
 
+all_classes = {'State': State, 'City': City,
+               'User': User, 'Place': Place,
+               'Review': Review, 'Amenity': Amenity}
+
+
 
 class DBStorage:
     __engine = None
@@ -33,26 +38,40 @@ class DBStorage:
             Base.metadata.drop_all(self.__engine)
 
     def all(self, cls=None):
-        if cls is None:
-            objs = self.__session.query(State).all()
-            objs.extend(self.__session.query(City).all())
-            objs.extend(self.__session.query(User).all())
-            objs.extend(self.__session.query(Place).all())
-            objs.extend(self.__session.query(Review).all())
-            objs.extend(self.__session.query(Amenity).all())
+        """Query and return all objects by class/generally
+        Return: dictionary (<class-name>.<object-id>: <obj>)
+        """
+        if not cls:
+            data_list = self.__session.query(Amenity)
+            data_list.extend(self.__session.query(City))
+            data_list.extend(self.__session.query(Place))
+            data_list.extend(self.__session.query(Review))
+            data_list.extend(self.__session.query(State))
+            data_list.extend(self.__session.query(User))
         else:
-            if type(cls) is str:
-                cls = eval(cls)
-            objs = self.__session.query(cls)
+            data_list = self.__session.query(cls)
+        return {'{}.{}'.format(type(obj).__name__, obj.id): obj
+                for obj in data_list}
+        # if not cls:
+        #     data_list = self.__session.query(Amenity)
+        #     data_list.extend(self.__session.query(City))
+        #     data_list.extend(self.__session.query(Place))
+        #     data_list.extend(self.__session.query(Review))
+        #     data_list.extend(self.__session.query(State))
+        #     data_list.extend(self.__session.query(User))
+        # else:
+        #     if type(cls) is str:
+        #         cls = eval(cls)
+        #     objs = self.__session.query(cls)
 
-        result = []
-        for obj in objs:
+        # result = []
+        # for obj in objs:
 
-            better_dic = BaseModel.to_dict(obj)
-            better_dic.pop("__class__")
-            result.append(f"[{type(obj).__name__}] ({obj.id}) {better_dic}")
+        #     better_dic = BaseModel.to_dict(obj)
+        #     better_dic.pop("__class__")
+        #     result.append(f"[{type(obj).__name__}] ({obj.id}) {better_dic}")
 
-        return result
+        # return result
 
     def new(self, obj):
         """Adds new object to the storage"""
