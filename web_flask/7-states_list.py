@@ -1,5 +1,7 @@
 #!/usr/bin/python3
-# a script that importing faslk to create a web app
+"""A script that starts a flask web application
+Your web application must be listening on 0.0.0.0, port 5000
+"""
 
 from flask import Flask, render_template
 from models import storage
