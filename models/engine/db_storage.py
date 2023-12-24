@@ -15,7 +15,6 @@ all_classes = {'State': State, 'City': City,
                'Review': Review, 'Amenity': Amenity}
 
 
-
 class DBStorage:
     __engine = None
     __session = None

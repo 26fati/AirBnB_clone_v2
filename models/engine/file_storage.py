@@ -77,7 +77,7 @@ class FileStorage:
                 except (KeyError, AttributeError):
                     pass
                 break
-    
+
     def close(self):
         """ calls reload() to :eserializing the JSON file to objects
         """
