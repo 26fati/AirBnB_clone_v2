@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-# a script that starts a Flask web application
+""" A module serves as a flask starter """
 
 from flask import Flask
 
